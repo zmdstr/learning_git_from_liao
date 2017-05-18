@@ -14,3 +14,6 @@ git config user.name "Your Name"
 git config user.email "email@xx.com"
 ```
 git config --list 查看当前配置, 在当前项目下面查看的配置是全局配置+当前项目的配置, 使用的时候会优先使用当前项目的配置
+
+
+追加的项目

@@ -128,6 +128,7 @@ git tag -d v0.1 #删除标签
 git push origin <tagname> #推送标签到远程
 git push origin --tags #推送本地所有未推送到远程的标签
 git push origin :refs/tags/<tagname> #删除远程标签
+```
 - 自定义git
 ```git
 git config --global color.ui true #配置颜色开启

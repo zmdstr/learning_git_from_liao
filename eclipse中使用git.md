@@ -64,4 +64,5 @@ local.properties
 - push 到 github
 
 ![图片.png](http://upload-images.jianshu.io/upload_images/4712888-9f944b5e7d90683a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 直接在 URI 中填入 github 仓库地址，其它项目会自动补充，然后下一步即可。

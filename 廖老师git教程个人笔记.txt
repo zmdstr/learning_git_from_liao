@@ -1,0 +1,144 @@
+
+安装完git后：
+表明本机器全局git 用户
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"     
+
+git init   // 在当前目录创建git 版本库 会生成 .git目录，内部有stage(暂存区)和 当前分支
+
+
+1、版本跟新
+	git add filename  					 // 把文件添加到暂存区
+
+	git status 							// 查询当前工作区文件与版本库是否有差别 ，或暂存区即待提交(commit)文件
+
+	  Changes to be committed:          //表示已经add 的文件（暂存区） 
+	  
+	  Changes not staged for commit:
+	  modified: filename  				// 表示已经修改，但未add 的文件
+
+	git diff  filename					// 查看工作区某文件与版本库（分支）的 差别 ->若暂存区有该文件，比较的就是工作区与暂存区的差别
+
+	git reset HEAD filename				// 从暂存区 撤销到工作区
+
+	git commit -m" 本次提交说明 " 	 	 // 把暂存区文件提交到当前分支
+	
+	##每次修改，如果不add到暂存区，那就不会加入到commit中
+
+2、版本回退
+	git log 							// 查看 版本库 版本记录即 commit记录
+	git --pretty=oneline 				// 简略显示 版本历史
+	
+	git reset --hard HEAD^				//作用 返回到上一版本  在Git中，用HEAD表示当前版本，
+	git	reset --hard commit_id(版本号)(前几位即可)	//上一个版本就是HEAD^，上上一个版本就是HEAD^^，往上100个版本HEAD~100
+	
+	git reflog 							// 查看历史命令 含 各个版本的id
+
+	git checkout --filename  				//撤回文件修改 若暂存区有该文件从暂存区返回，否则从版本分支返回
+	
+3、删除 
+	
+	git rm filename 从本地及版本库删除 (commit 生效)
+	git reset HEAD tet.txt 从暂存区撤销文件tet的删除命令 
+
+4、要关联一个远程库，使用命令  git remote add origin git@server-name:path/repo-name.git
+	第一次推送 ： git push -u origin master 第一次推送master分支的所有内容到远程库
+	以后的推送 ： git push origin master 推送最新修改；
+	查看远程库信息，使用git remote -v
+	
+5、分支
+	Git鼓励大量使用分支：
+	
+	创建分支：git branch <name>
+	
+	切换分支：git checkout <name>
+	
+	创建+切换分支：git checkout -b <name>
+	
+	查看分支：git branch
+
+	合并某分支到当前分支：git merge <name>
+
+	删除分支：git branch -d <name>
+	强行删除 git branch -D <name>	丢弃一个没有被合并过的分支
+	
+6、合并分支冲突
+	当前分支 master  合并分支 dev
+	git merge dev 出现conflict后 显示
+	CONFLICT (content): Merge conflict in filename
+	Automatic merge failed; fix conflicts and then commit the result.
+	[root@bogon GitLearning]# git status 
+	
+	a) 显示冲突文件   git status  
+	
+	b) 进行修改 vim 冲突文件   
+	
+	c) 正常提交 git add xxx  --->  git commit -m" conflict fixed "   
+		注意：此次修改 只改动合并后的冲突分支 即master。 原dev分支 内容不变
+		
+	
+7、禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息
+
+	git merge --no-ff -m "merge with no-ff" dev   // 因为有新commit 所以加上-m
+	
+	合并后，我们用git log看看分支历史：
+	$ git log --graph --pretty=oneline --abbrev-commit
+	
+8、bug分支：git stash： 当手头工作没有完成时，先把当前分支工作现场git stash一下，然后去新开分支修复bug，修复后，再回原分支git stash pop，回到工作现场
+
+	1、git stash  ：把当前分支工作台和暂存区 贮存。空出工作台暂存区去进行其他紧急修复，
+	2、 $ git checkout master
+		$ git checkout -b issue-101
+		//去文件里修bug
+		$ git add README.md
+		$ git commit -m "fix-issue-101"
+
+	3、 $ git checkout master
+		git merge --no-ff -m "m-merge-issue-101" issue-101
+		git branch -d issue-101
+
+	4、 $ git checkout dev
+	5、 $ git stash list   // 查看存储起来的工作现场
+		stash@{0}: WIP on dev: 6224937 add merge
+	6、	$ git stash pop //   恢复之前的工作现场
+	
+	另：你可以多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash，用命令：
+		$ git stash apply stash@{0}
+		
+9、 git checkout -b dev origin/dev    // 在本地创建远程库origin的某个分支
+
+
+	
+10、推送拉取分支 
+	git push origin branch_name  推送到远程分支。推送失败时，说明有文件冲突，需要先拉取回来，在本地合并后再push
+	git pull origin branch_name  从远程分支拉取，会出现合并冲突，解决冲突后 commit， 再 push
+	
+	
+11、标签
+	$ git tag <name>   											//	当前分支打标签 
+	$ git tag <name>  commitid									//	针对某id 打标签
+	$ git show <tagname>   										//	查看标签详细信息
+	$ git tag -a v0.1 -m "version 0.1 released" <commitid> 		//	带有说明的标签，用-a指定标签名，-m指定说明文字
+	$ git tag -s <tagname> -m "blablabla..."     				//	可以用PGP签名标签
+	$ git tag -d v0.1											//  delete tag
+	$ git push origin <tagname>									//  推送某个标签到远程
+	$ git push origin --tags									//  一次性推送全部尚未推送到远程的本地标签
+	
+	删除远程标签就麻烦一点，先从本地删除
+	$ git tag -d v0.9
+	$ git push origin :refs/tags/v0.9
+	
+多人协作常规流程 ：
+
+	因此，多人协作的工作模式通常是这样：
+
+	首先，可以试图用git push origin branch-name推送自己的修改；
+
+	如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+
+	如果合并有冲突，则解决冲突，并在本地提交；
+
+	没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+
+	如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令
+	git branch --set-upstream branch-name origin/branch-name。

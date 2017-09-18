@@ -1,0 +1,156 @@
+git: 源代码管理工具
+
+初始化git仓库: 
+	在git命令窗口中输入
+	$ git init
+	会在当前目录下创建一个隐藏的 .git 版本库
+
+	$ pwd 查看当前仓库目录
+注册仓库：
+	创建用户名：
+	$ git config --global user.name 'hero'    全局用户
+
+	创建用户邮箱：
+	$ git config --global user.email 'hero@123.com'   全局用户邮箱
+
+	查看配置信息：
+ 	$ git config --list
+
+备份文件
+	将工作区的指定文件添加到仓库暂存区
+	$ git add ./1.html
+	$ git add ./              添加文件夹下所有文件
+	$ git add .              添加文件夹下所有文件
+
+	将暂存区所有文件存入仓库版本库 并添加注释m
+	$ git commit -m "注释:添加新的更新"
+	$ git commit  会直接进入编辑模式 
+	（按esc后  输入:q可以退出编辑模式   输入:wq会保存后退出编辑      输入:q!强制退出不保存）
+
+	直接备份所有修改过的文件到版本库 (适用于已存在的那些修改过的文件； 新创建的不可以使用，必须先添加和备份过)：
+	$ git commit --all -m "注释内容"
+
+删除文件
+	$ git rm a.txt
+	删除工作区中的文件并提交至暂存区
+
+
+查看状态
+	$ git status
+
+	新创建的文件会显示
+	未提交的文件会显示
+	修改过的问价会显示
+	添加到暂存区会显示
+
+查看与改变之前不一样的地方
+	$ git diff
+	显示文件中的变化
+
+撤销到上一次 add 或 commit 的状态
+	$ git checkout -- a.txt
+	撤销工作区中新修改的内容
+
+清空暂存区内的内容
+	$ git reset HEAD a.txt
+
+
+忽略提交的文件：
+	在提交前忽略才可以生效
+	在工作区目录下创建 .gitignore 文件 
+		$ touch .gitignore
+
+		文件内容填写要被忽略的文件：
+		/.gitignore       //忽略自己
+		/1.html  			//忽略1.html文件
+		/js/*.js  			//忽略 js 文件夹下的 .js 后缀的文件
+
+
+查看历史提交的日志：
+	$ git log 显示详细的提交日志
+
+	$ git log --oneline 简单显示日志
+
+	查看所有版本回滚操作日志：
+	$ git reflog
+
+回滚版本：
+	$ git reset --hard Head^   回退到代码最近一次提交的状态 
+	$ git reset --hard Head~0   回退到代码最近一次提交的状态 
+	$ git reset --hard Head^^   回退到代码上上一次提交的状态...
+	$ git reset --hard Head~1   回退到代码上上一次提交的状态...
+	...
+	$ git reset --hard 1o4k5j6   回退到指定版本号...
+
+
+创建分支：
+	$ git branch dev     创建了dev分支
+
+查看分支：
+	$ git branch 
+
+切换分支：
+	$ git checkout dev
+
+合并分支到主线：
+	$ git merge dev
+
+删除分支：
+	$ git branch -d dev   删除dev分支
+
+关联远程仓库：
+	$ git remote add origin <仓库地址>
+	将远程仓库存在 origin 变量中
+
+推送至远程仓库：
+	$ git push origin master
+	指定推送至 origin 仓库
+
+上传推送分支文件
+	$ git push github的url地址 master
+	将master分支的文件上传到github
+
+下载分支文件
+	$ git pull github的url地址 master
+	将master分支的文件下载到本地(需要具有本地仓库)
+
+	$ git clone github的url地址
+	将所有的文件下载到本地
+
+	$ git clone github的url地址 --depth 1
+	只将最近1次commit提交下载到本地
+
+生成SSH公钥、私钥
+	$ ssh-keygen -t rsa -C "123@q.com"   
+	//不能运行命令时，需要配置ssh-keygen的环境变量
+
+	公钥私钥 id_rsa.pub 存放目录：
+	C:\Users\Benja\.ssh
+
+在github上添加SSH公钥：
+	settings -> SSH and GPG keys -> 把 C:\Users\Benja\.ssh 下的 id_rsa.pub 文件保存的公钥添加到github
+
+	新建仓库时，使用SSH上传文件即可
+
+	多人合作时，有一人更改了网上服务器仓库的资源，那么其他人更改了本地资源，再下载服务器资源时，会产生冲突，需要手动解决
+
+
+为了减少冲突；先pull在push
+
+
+简化命令：
+	简化链接： 将仓库链接保存在origin变量上（只能在当前项目下使用）
+	$ git remote add origin http://www.123.com
+
+	使用变量链接：
+	$ git push http://www.123.com 简化为：
+	 
+	$ git push origin master
+
+
+	将当前分支关联远程服务器的master分支
+	$ git push origin -u master     
+	$ git push origin -u 分支名     
+	之后直接使用：
+	$ git push
+	$ git pull

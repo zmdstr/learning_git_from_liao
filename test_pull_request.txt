@@ -1,0 +1,125 @@
+   git监控的是修改 合并的也是修改 一次修改commit就是一个版本
+   暂存区是公用的，如果不通过stash命令隐藏，会带到其它分支（issue-101）去
+   mkdir：         XX (创建一个空目录 XX指目录名)
+
+   pwd：          显示当前目录的路径。
+
+   git init          把当前的目录变成可以管理的git仓库，生成隐藏.git文件。
+
+   git add XX       把xx文件添加到暂存区去。
+
+   git commit –m “XX”  提交文件 –m 后面的是注释。
+
+   git status        查看仓库状态
+
+   git diff  XX      查看XX文件修改了那些内容
+
+   git log          查看历史记录
+
+   git log --graph --pretty=oneline --abbrev-commit   用带参数的git log也可以看到分支合并图
+
+   git reset HEAD <file>. 可以把暂存区的修改撤销掉（unstage），重新放回工作区（HEAD表示最新版本）
+
+   git checkout — XX  把XX文件在工作区的修改全部撤销。 一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+						     一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态
+
+   git reset  –hard HEAD^ 或者 git reset  –hard HEAD~ 回退到上一个版本
+
+                        (如果想回退到100个版本，使用git reset –hard HEAD~100 )
+
+   cat XX         查看XX文件内容
+
+   git reflog       查看历史记录的版本号id
+
+   git rm XX          删除XX文件
+
+   git remote  -v   查看远程库的信息
+
+   git remote add origin https://github.com/tugenhua0707/testgit 关联一个远程库
+
+   git push –u(第一次要用-u 以后不需要) origin master 把当前master分支推送到远程库
+
+   git clone https://github.com/tugenhua0707/testgit  从远程库中克隆
+
+   git checkout –b dev  创建dev分支 并切换到dev分支上
+
+   git branch  查看当前所有的分支
+
+   git branch -r  可以用来查看远程分支
+
+   git checkout master 切换回master分支
+
+
+   //合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward(快进模式)合并就看不出来曾经做过合并。
+
+   git merge dev    在当前的分支上合并dev分支  但这种模式下，删除分支后，会丢掉分支信息
+
+   git merge --no-ff -m "merge with no-ff" dev 在当前分支合并dev分支 创建一个新的commit 从分支历史上就可以看出分支信息
+
+   git branch –d dev 删除dev分支
+
+   git branch -D feature-vulcan  强行删除还没有被合并分支的分支
+
+   git branch name  创建分支
+
+   git branch --set-upstream dev origin/dev 指定本地dev分支与远程origin/dev分支的链接
+
+   git tag -a <tagname> -m "blablabla..."
+
+   git tag tag_name 就可以打一个新标签：
+
+   git tag v0.9 commit_id 给某个版本打标签
+
+   git tag  查看所有标签
+
+   git show <tagname> 可以看到标签详细信息
+
+   git tag -d v1.0 删除本地标签
+
+   git push origin :refs/tags/v1.0可以删除一个远程标签
+
+   git push origin v1.0 将本地某个标签推送到远程
+
+   git push origin --tags 将本地全部标签推送到远程
+
+   git stash 把当前的工作隐藏起来 等以后恢复现场后继续工作
+
+   git stash list 查看所有被隐藏的文件列表
+
+   git stash apply 恢复被隐藏的文件，但是内容不删除
+
+   git stash drop 删除文件
+
+   git stash pop 恢复文件的同时 也删除文件
+
+   git remote 查看远程库的信息
+
+   git remote –v 查看远程库的详细信息
+
+   git push origin master  Git会把master分支推送到远程库对应的远程分支上  git pull = git fetch + git merge
+
+   git fetch：相当于是从远程获取最新版本(commit-id)到本地，不会自动merge
+
+   git pull：相当于是从远程获取最新版本并merge到本地
+   例1：如果你正在dev上开发，现在老板让你处理master上的一个缺陷，你的解决办法是什么？
+        1、先保存DEV当前工作；git stash
+	2、切换到master git checkout master
+	3、创建101分支  git checkout -b bug_101
+	4、修复缺陷  git add XX   git commit -m "XXX"
+	5、master merge 101分支  git checkout master   git merge --no-ff -m "修复XXBug" bug_101
+        6、删除101分支 git branch -d bug_101
+        7、本地分支推送到远程  git push orign master
+   例2：git多人怎么协作？
+       1、首先，可以试图用git push origin dev推送自己的修改；
+       2、如果推送失败，则因为远程分支比你的本地更新版本高，需要先用git pull试图合并；
+       3、如果合并有冲突，则解决冲突，并在本地提交；
+       4、没有冲突或者解决掉冲突后，再用git push origin dev推送就能成功！
+       如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream dev origin/dev。
+  例3 ：如何将本地项目上传到 github？
+       1.查看已关联远程仓库 git remote -v
+       2.在本地目录下关联远程repository ： git remote add origin git@github.com:git_username/repository_name.git
+       3.使用命令 git push -u origin master 第一次推送 master 分支的所有内容
+       4.取消本地目录下关联的远程库： git remote remove origin
+       注意设置 gitignore 文件  gitignore 失效 清除本地缓存 git rm -r --cached
+

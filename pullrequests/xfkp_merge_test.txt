@@ -1,0 +1,2 @@
+1.删除github上的一个项目：
+Setting --->  Options  -->  Delete this repository

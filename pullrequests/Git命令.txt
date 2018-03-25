@@ -1,0 +1,147 @@
+
+git config --global user.name "Your Name" 
+git config --global user.email "Your Email"
+--global 表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
+
+
+mkdir learngit  创建文件夹（learngit为文件夹的名字）
+pwd 显示当前目录
+
+git init 创建仓库
+
+首先这里再明确一下，所有的版本控制系统，其实只能跟踪文本文件的改动，比如TXT文件，网页，所有的程序代码等等，Git也不例外。版本控制系统可以告诉你每次的改动，比如在第5行加了一个单词“Linux”，在第8行删了一个单词“Windows”。而图片、视频这些二进制文件，虽然也能由版本控制系统管理，但没法跟踪文件的变化，只能把二进制文件每次改动串起来，也就是只知道图片从100KB改成了120KB，但到底改了啥，版本控制系统不知道，也没法知道。
+
+Windows自带的记事本编辑任何文本文件。原因是Microsoft开发记事本的团队使用了一个非常弱智的行为来保存UTF-8编码的文件，他们自作聪明地在每个文件开头添加了0xefbbbf（十六进制）的字符，你会遇到很多不可思议的问题，比如，网页第一行可能会显示一个“?”，明明正确的程序一编译就报语法错误，等等，都是由记事本的弱智行为带来的。
+
+一定要放到learngit目录下（子目录也行），因为这是一个Git仓库，放到其他地方Git再厉害也找不到这个文件。
+
+git add readme.txt 把文件添加到仓库 可反复多次使用，添加多个文件；
+git add . 把全部文件添加到仓库
+
+git commit -m "提交说明" -m后面输入的是本次提交说明
+
+为什么Git添加文件需要add，commit一共两步呢？因为commit可以一次提交很多文件，所以你可以多次add不同的文件
+
+git status 查看当前仓库的状态
+
+git diff 查看不同
+git diff HEAD -- readme.txt 查看工作区和版本库里面最新版本的区别
+git diff --cached    #是暂存区(stage)和分支(master)的比较
+
+要随时掌握工作区的状态，使用git status命令。
+
+如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+
+git log 显示从最近到最远的提交日志
+git log -n 查看最近n次的提交信息
+git log --pretty=oneline 显示简洁提交日志
+git log --graph   命令可以看到分支合并图。
+--abbrev-commit 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+
+
+在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+回退版本后如果还想在回来：只要上面的命令行窗口还没有被关掉，你就可以顺着往上找啊，找到你你想回来的connit id，然后git reset --hard xxx。
+版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了。
+git reset --hard HEAD^  --hard表示：
+git reset --hard 3628164 回到指定的commit id版本
+git reset HEAD file 把文件从暂存区回退到工作区
+
+git checkout -- file 让这个文件回到最近一次git commit或git add时的状态。
+git checkout -- file 命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令
+
+
+查看分支：git branch
+
+创建分支：git branch <name>
+
+切换分支：git checkout <name>
+
+创建+切换分支：git checkout -b <name>
+git checkout -b dev origin/dev 创建远程origin的dev分支到本地
+
+合并某分支到当前分支：git merge <name>
+--no-ff 可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并，合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
+
+
+删除分支：git branch -d <name>
+
+
+没提交时用checkout撤销修改，提交时用reset回退版本。在暂存区用git reset HEAD file回退，在用checkout撤销
+
+Git在内部有个指向当前版本的HEAD指针，当你回退版本的时候，Git仅仅是把HEAD从指向当前版本改为指向你指定的版本，然后顺便把工作区的文件更新了。所以你让HEAD指向哪个版本号，你就把当前版本定位在哪。
+
+git reflog 用来记录你的每一次命令
+
+
+add到暂存区 commit把暂存区的内容放到分支
+
+cat readme.txt 查看文件内容
+
+由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令
+
+
+用 git rm 来删除文件，同时还会将这个删除操作记录下来；
+用 rm 来删除文件，仅仅是删除了物理文件，没有将其从 git 的记录中剔除。
+
+
+Fast-forward 快进模式，也就是直接把master指向dev的当前提交，所以合并速度非常快。
+
+在实际开发中，我们应该按照几个基本原则进行分支管理：
+
+首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+
+那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+
+你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+
+
+
+
+git stash 把当前工作现场“存储”起来
+git stash list 查看存起来的工作现场
+
+git stash apply stash@{0} 恢复指定工作现场
+git stash drop  stash@{0} 删除指定工作现场，不指定默认删除最新的
+git stash pop   恢复指定工作现场并删除记录，不指定默认恢复最新并删除最新
+git stash clear 清空工作现场
+
+
+git branch -D feature-vulcan  强行删除分支
+ 
+git remote -v 查看远程仓库名字 -v表示显示详细信息
+上面显示了可以抓取和推送的origin的地址。如果没有推送权限，就看不到push的地址。
+
+
+
+
+多人协作的工作模式通常是这样：
+
+首先，可以试图用git push origin branch-name推送自己的修改；
+
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+
+如果合并有冲突，则解决冲突，并在本地提交；
+
+没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+
+如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream branch-name origin/branch-name。
+
+
+
+命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+
+git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+
+git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
+
+命令git tag可以查看所有标签。
+
+git show <tagname> 可以查看标签信息
+
+命令git push origin <tagname>可以推送一个本地标签；
+
+命令git push origin --tags可以推送全部未推送过的本地标签；
+
+命令git tag -d <tagname>可以删除一个本地标签；
+
+命令git push origin :refs/tags/<tagname>可以删除一个远程标签。要先本地删除

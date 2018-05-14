@@ -8,6 +8,5 @@
 - 欢迎 watch 查看最新笔记  
 - 欢迎 在pull requests 目录下测试 pull requests   
 - 廖老师的 git 教程笔记今天终于完成了！  2017-05-20
-- 下一步计划 
-eclipse idea 中 git 的使用及 github 的使用学习
+- 欢迎关注微信公众号 ETLshow 
 

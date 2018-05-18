@@ -10,3 +10,4 @@ feature分支操作
 
 release分支操作
 1、版本bug修复完成
+2、版本2

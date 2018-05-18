@@ -1,0 +1,13 @@
+develop分支操作
+1、切换dev分支
+2、创建testGit文件
+3、编辑中...
+
+
+feature分支操作
+1、编辑完成
+
+
+release分支操作
+1、版本bug修复完成
+2、版本2

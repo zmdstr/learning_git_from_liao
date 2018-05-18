@@ -6,3 +6,7 @@ develop分支操作
 
 feature分支操作
 1、编辑完成
+
+
+release分支操作
+1、版本bug修复完成

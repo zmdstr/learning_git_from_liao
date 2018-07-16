@@ -1,0 +1,71 @@
+ls 显示文件或目录
+mkdir 创建目录
+mkdir dir1 创建一个叫做 'dir1' 的目录' 
+mkdir dir1 dir2 同时创建两个目录
+cd 切换目录
+
+vim使用
+
+vim三种模式：命令模式、插入模式、编辑模式。使用ESC或i或：来切换模式。
+ 
+命令模式下：
+:q 退出
+:q! 强制退出
+:wq 保存并退出
+:set number 显示行号
+:set nonumber 隐藏行号
+/apache 在文档中查找apache 按n跳到下一个，shift+n上一个
+yyp 复制光标所在行，并粘贴
+h(左移一个字符←)、j(下一行↓)、k(上一行↑)、l(右移一个字符→)
+
+使用rm -rf 目录名字 命令即可
+
+-r 就是向下递归，不管有多少级目录，一并删除
+-f 就是直接强行删除，不作任何提示的意思
+
+eg
+
+删除文件夹实例：rm -rf /var/log/httpd/access
+将会删除/var/log/httpd/access目录以及其下所有文件、文件夹
+
+删除文件使用实例：rm -f /var/log/httpd/access.log
+将会强制删除/var/log/httpd/access.log这个文件
+
+date 显示系统日期
+cd ../.. 返回上两级目录 
+
+find / -name file1 从 '/' 开始进入根文件系统搜索文件和目录 
+
+shutdown -h now 关闭系统(1) 
+init 0 关闭系统(2) 
+telinit 0 关闭系统(3) 
+shutdown -r now 重启(1) 
+reboot 重启(2)
+
+
+
+
+
+
+git基础命令:
+ 
+ git reset --hard HEAD^
+
+ git log
+
+ git log --pretty=oneline
+
+ git status
+ 
+ git init
+
+ git diff
+
+ git reset HEAD file
+
+ git checkout -- file
+
+ git add
+
+ git commit -m ""
+

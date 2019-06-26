@@ -1,0 +1,4 @@
+在初始设置中，设置 个人名字和邮箱 遇到问题，谁能帮忙解答下？
+$ git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+都显示 “conmand not found”
